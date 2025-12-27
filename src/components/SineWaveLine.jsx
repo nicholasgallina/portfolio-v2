@@ -2,7 +2,7 @@
 import * as THREE from "three";
 import {useThree, useFrame} from "@react-three/fiber";
 import {Line} from "@react-three/drei";
-import {useState, useMemo, useRef} from "react";
+import {useState, useMemo} from "react";
 
 export default function SineWaveLine({
     z = 0,
@@ -11,7 +11,7 @@ export default function SineWaveLine({
     pointsCount = 100,
 })  {
     const { camera } = useThree();
-    const [phase, setPhase] = useState(0);                                                   //keeps track of phase wave
+    const [phase, setPhase] = useState(0); //keeps track of phase wave
 
      //-------------------------HELPER: convert screen-space coordinates (NDC) to world-space-------------------------//
     
@@ -31,15 +31,15 @@ export default function SineWaveLine({
 
       //animate phase increment
       useFrame(() => {
-        setPhase((p) => p + 0.05);
+        setPhase((p) => p + 0.015); //controls speed of wave
       });
   
       //recompute points on phase change
         const points = useMemo(() => {
          const pts = [];
           for (let i = 0; i <= pointsCount; i++) {
-            const xNDC = -1 + (2 * i) / pointsCount;                                                      //from -1 to 1
-            const yNDC = amplitude * Math.sin(frequency * xNDC * Math.PI * 2 + phase);                     //sine NDC Y space
+            const xNDC = -1 + (2 * i) / pointsCount; //from -1 to 1
+            const yNDC = amplitude * Math.sin(frequency * xNDC * Math.PI * 2 + phase); //sine NDC Y space
             const worldPoint = screenToWorld(xNDC, yNDC, z);
             pts.push(worldPoint.toArray());
           }
@@ -49,9 +49,9 @@ export default function SineWaveLine({
         
         return (
       <Line 
-        points={points}                                                     //sine wave made from the points array above
-        color="black"                                                                                       //line color
-       linewidth={3}                                                                                        //line width
+        points={points} //sine wave made from the points array above
+        color="white" //line color
+       linewidth={3} //line width
      />                                                          
     );
   };
